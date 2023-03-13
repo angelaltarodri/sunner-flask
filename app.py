@@ -11,7 +11,7 @@ plant_info_LEYTON = api.plant_info(1626659)
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=['GET'])
 def home():
     return plant_list
 
