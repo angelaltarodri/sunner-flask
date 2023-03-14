@@ -28,6 +28,4 @@ def gabo():
     return plant_info
 
 if __name__ == '__main__':
-    # app.run(debug=True, port=8001)
-    app.debug = True
-    app.run()
+    app.run(debug=True, use_reloader=True)
