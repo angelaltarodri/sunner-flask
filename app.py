@@ -1,5 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
+import sys
+import logging
 
 import growattServer
 
@@ -26,6 +28,9 @@ def leyton(plantId):
 def gabo():
     plant_info = api.plant_info(1581547)
     return plant_info
+
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
