@@ -22,6 +22,11 @@ def leyton(plantId):
     plant_info = api.plant_info(plantId)
     return plant_info
 
+@app.route("/cortez")
+def gabo():
+    plant_info = api.plant_info(1581547)
+    return plant_info
+
 if __name__ == '__main__':
     # app.run(debug=True, port=8001)
     app.debug = True
