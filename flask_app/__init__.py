@@ -20,7 +20,7 @@ CORS(app)
 
 @app.route("/")
 def home():
-    return jsonify(plant_list)
+    return plant_list
 
 # 1654546
 # 1626659
@@ -31,7 +31,7 @@ def plant_info(plantId):
     if not plantId.isnumeric():
         return jsonify(message="Plant ID inválido")
     plant_info = api.plant_info(plantId)
-    return jsonify(plant_info)
+    return plant_info
 
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
