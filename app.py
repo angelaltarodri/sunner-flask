@@ -30,8 +30,11 @@ def home():
 def plant_info(plantId):
     if not plantId.isnumeric():
         return jsonify(message="Plant ID inválido")
-    plant_info = api.plant_info(plantId)
-    return plant_info
+    try:
+        plant_info = api.plant_info(plantId)
+        return plant_info
+    except ValueError:
+        return jsonify(message="Error al decodificar el objeto JSON"), 400
 
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
