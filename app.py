@@ -14,9 +14,10 @@ user_pass = '123456'
 
 CORS(app)
 
+api = growattServer.GrowattApi(False, "my-user-id")
+
 @app.route("/")
 def home():
-    api = growattServer.GrowattApi(False, "my-user-id")
     login_response = api.login(username, user_pass)
     plant_list = api.plant_list(login_response['user']['id'])
     return plant_list
@@ -25,11 +26,8 @@ def home():
 # 1626659
 # 1581547
 
-@app.route("/<string:plantId>")
+@app.route("/<int:plantId>")
 def plant_info(plantId):
-    api = growattServer.GrowattApi(False, "my-user-id")
-    if not plantId.isnumeric():
-        return jsonify(message="Plant ID inválido")
     try:
         plant_info = api.plant_info(plantId)
         return plant_info
