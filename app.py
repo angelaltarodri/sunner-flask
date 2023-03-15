@@ -33,8 +33,8 @@ def plant_info(plantId):
     try:
         plant_info = api.plant_info(plantId)
         return plant_info
-    except ValueError:
-        return jsonify(message="Error al decodificar el objeto JSON"), 400
+    except ValueError as e:
+        return jsonify(message=str(e)), 400
 
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
