@@ -36,13 +36,13 @@ def plant_info(plantId):
     except ValueError as e:
         return jsonify(message=str(e)), 400
 
-@app.route("/details")
-def plant_detail():
+@app.route("/details/<int:plantId>")
+def plant_details(plantId):
     try:
-        # # dia y mes
-        # plant_detail = api.plant_detail(1626659, Timespan.day, datetime.datetime(2023, 3, 20, 12, 0) )
+        datetoday = datetime.date.today()
+        print(plantId)
         # hora, dia y mes
-        dashboard_data = api.dashboard_data(1626659, Timespan.day, datetime.datetime(2023, 3, 20))
+        dashboard_data = api.dashboard_data(plantId, Timespan.hour, datetoday)
         return dashboard_data
     except ValueError as e:
         return jsonify(message=str(e)), 400
