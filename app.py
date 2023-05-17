@@ -12,7 +12,7 @@ from growattServer import Timespan
 app = Flask(__name__)
 
 username = 'sunnerperu'
-user_pass = '123456'
+user_pass = 'abc123'
 
 CORS(app)
 
@@ -20,7 +20,7 @@ api = growattServer.GrowattApi(False, "my-user-id")
 
 @app.route("/")
 def home():
-    login_response = api.login(username, user_pass)
+    login_response = api.login(username, user_pass, False)
     plant_list = api.plant_list(login_response['user']['id'])
     return plant_list
 
@@ -36,14 +36,59 @@ def plant_info(plantId):
     except ValueError as e:
         return jsonify(message=str(e)), 400
 
-@app.route("/details/<int:plantId>")
-def plant_details(plantId):
+@app.route("/dashboard/<int:plantId>/<string:metric>")
+def plant_dashboard(plantId, metric):
     try:
         datetoday = datetime.date.today()
         print(plantId)
+        print(metric)
+        if metric == 'h':
+            timespan = Timespan.hour
+            dashboard_data = api.dashboard_data(plantId, timespan, datetoday)
+            return dashboard_data
+        elif metric == 'd':
+            timespan = Timespan.day
+            dashboard_data = api.dashboard_data(plantId, timespan, datetoday)
+            return dashboard_data
+        elif metric == 'm':
+            timespan = Timespan.month
+            dashboard_data = api.dashboard_data(plantId, timespan, datetoday)
+            return dashboard_data
+        elif metric == 'y':
+            dateyearago = datetoday - datetime.timedelta(days=365)
+
+            timespan = Timespan.month
+            dd1 = api.dashboard_data(plantId, timespan, datetoday)
+            y1 = datetoday.year
+            dd2 = api.dashboard_data(plantId, timespan, dateyearago)
+            y2 = dateyearago.year
+            dashboard_data = {
+                "detailsDataCurrentYear": {
+                    "year": y1,
+                    "data":dd1, 
+                },
+                "detailsDataYearAgo": {
+                    "year":y2,
+                    "data": dd2
+                }
+            }
+            return jsonify(dashboard_data)
+    except ValueError as e:
+        return jsonify(message=str(e)), 400
+
+@app.route("/details/<int:plantId>/<string:metric>")
+def plant_details(plantId, metric):
+    try:
+        datetoday = datetime.date.today()
+        print(plantId)
+        print(metric)
+        timespan = Timespan.day
+
+        if metric == 'm':
+            timespan = Timespan.month
         # hora, dia y mes
-        dashboard_data = api.dashboard_data(plantId, Timespan.hour, datetoday)
-        return dashboard_data
+        details_data = api.plant_detail(plantId, timespan, datetoday)
+        return details_data
     except ValueError as e:
         return jsonify(message=str(e)), 400
 
